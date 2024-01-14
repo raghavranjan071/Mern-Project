@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const express = require('express'); // Router for backend
 const router = express.Router();
 const bcrypt = require('bcrypt');
@@ -132,6 +133,7 @@ router.post('/signin', async(req,res) => {
     // res.json({message: "Done"});
 
     try{
+        let token;
         const { email, password} = req.body;
 
         //The data is not entered by the user
@@ -151,6 +153,13 @@ router.post('/signin', async(req,res) => {
         {
             const isMatch = await bcrypt.compare(password,userLogin.password);
 
+            token = await userLogin.generateAuthToken();
+            console.log(token);
+
+            res.cookie('jwtoken',token, {
+                expires: new Date(Date.now() + 25892000000),  //30 days baad token expire ho jayega
+                httpOnly: true
+            });
         if(!isMatch)
         {
             res.status(400).json({error: "Invalid Credientials pass"});

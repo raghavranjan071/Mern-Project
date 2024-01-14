@@ -34,6 +34,7 @@ app.get('/about',middleware,(req,res) => {
 });
 
 app.get('/contact',(req,res) => {
+    res.cookie('Test','King');
     res.send(`Hello contact world from the server`);
 });
 
