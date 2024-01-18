@@ -2,6 +2,9 @@ const jwt = require('jsonwebtoken');
 const express = require('express'); // Router for backend
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const authenticate = require('../middleware/authenticate');
+
+
 require('../db/conn');
 
 const User = require("../model/userSchema");
@@ -176,4 +179,13 @@ router.post('/signin', async(req,res) => {
     }
 
 });
+
+
+//Here we are sending data to root user because throw this we are getting our data in About.js and by coapring this data with our previous entered we are able to login in our system 
+router.get('/about', authenticate, (req,res) => {
+    console.log("Hello About");
+    res.send(req.rootUser);
+});
+
+
 module.exports = router;

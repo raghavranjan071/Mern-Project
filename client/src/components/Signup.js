@@ -1,9 +1,52 @@
 import React, { useState } from 'react'
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
 
- 
+  const history = useNavigate();
+  const [user, setUser] = useState({
+    name: "", email:"", phone: "", work: "", password: "", cpassword: ""
+  });
+
+  let name, value;
+
+  const handleInputs = (e) =>{
+    console.log(e);
+    name = e.target.name;
+    value = e.target.value;
+
+    setUser({...user, [name]: value});
+  }
+
+  const PostData = async (e) => {
+    e.preventDefault();
+
+    const {name, email, phone, work, password, cpassword} =user;
+
+    const res = await fetch('/register', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name, email, phone, work, password
+        ,cpassword
+      })
+    });
+
+    const data = await res.json();
+
+    if(data.status === 422 || !data)
+    {
+      window.alert("Invalid Registration");
+      console.log("Invalid Registration");
+    }else{
+      window.alert("Registration Successful");
+      console.log("Successful Registration");
+
+      history.push("/login");
+    }
+  }
   return (
     <>
       <section>
@@ -68,7 +111,7 @@ const Signup = () => {
                   </div>
 
                   <div className='form-group form-button'>
-                    <input type='submit' name='signup' id='signup' className='form-submit' value='register'  />
+                    <input type='submit' name='signup' id='signup' className='form-submit' value='register' onClick={PostData} />
                   </div>
                 </form>
 
