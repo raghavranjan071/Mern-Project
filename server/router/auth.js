@@ -182,9 +182,52 @@ router.post('/signin', async(req,res) => {
 
 
 //Here we are sending data to root user because throw this we are getting our data in About.js and by coapring this data with our previous entered we are able to login in our system 
+
+//About us ka page
 router.get('/about', authenticate, (req,res) => {
     console.log("Hello About");
     res.send(req.rootUser);
+});
+
+//Get user data for contact us and home page
+router.get('/about', authenticate, (req,res) => {
+    console.log("Hello About");
+    res.send(req.rootUser);
+});
+
+//Contat us page
+router.post('/contact',authenticate, async (req,res) => {
+    try{
+        const { name, email, phone, message }= req.body;
+
+        if(!name || !email || !phone || !message)
+        {
+            console.log('Error in contact form');
+            return res.json({error: "Plz fill the contact form"});
+        }
+
+        const userContact = user.findOne({_id: req.userID});    
+        
+        if(userContact)
+        {
+            const userMessage = await userContact.addMessage(name,email, phone, message);
+
+            await userContact.save();
+
+            res.status(201).json({message: "User Contact Successfully."});
+        }
+    } catch(error){
+        console.log(error);
+    }
+});
+
+
+
+//logout page
+router.get('/logout', authenticate, (req,res) => {
+    console.log("Hello Logout");
+    res.clearCookie('jwtoken', {path:'/'});
+    res.status(200).send("Logout Successful");
 });
 
 

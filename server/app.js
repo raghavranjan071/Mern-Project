@@ -37,10 +37,10 @@ const PORT = process.env.PORT;
 //     res.send(`Hello about world from the server`);
 // });
 
-app.get('/contact',(req,res) => {
-    res.cookie('Test','King');
-    res.send(`Hello contact world from the server`);
-});
+// app.get('/contact',(req,res) => {
+//     res.cookie('Test','King');
+//     res.send(`Hello contact world from the server`);
+// });
 
 app.get('/signin',(req,res) => {
     res.send(`Hello signin world from the server`);
